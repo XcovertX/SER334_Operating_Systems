@@ -1,0 +1,3 @@
+To compile run:
+
+gcc CovertFilters.c BmpProcessor.c PixelProcessor.c -lm -pthread -o CovertFilters

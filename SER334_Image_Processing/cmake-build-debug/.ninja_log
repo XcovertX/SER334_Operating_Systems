@@ -1,0 +1,16 @@
+# ninja log v5
+0	58	1642799979890161843	CMakeFiles/SER334_Image_Processing.dir/main.c.o	7cd52c230b5333f0
+125	167	1642791308394738713	SER334_Image_Processing	be629955cef61a6b
+0	54	1642800614424782920	CMakeFiles/SER334_Image_Processing.dir/main.c.o	7cd52c230b5333f0
+1	59	1642800614428783097	CMakeFiles/SER334_Image_Processing.dir/BMPHandler.c.o	b9deff06e72af5a6
+1	71	1642800614440783628	CMakeFiles/SER334_Image_Processing.dir/Image.c.o	b6b608d10aa76dd4
+71	95	1642800614464784690	SER334_Image_Processing	3f4c4d2baec8712b
+1	74	1643060942863267881	CMakeFiles/SER334_Image_Processing.dir/BMPHandler.c.o	b9deff06e72af5a6
+0	96	1643060942887267743	CMakeFiles/SER334_Image_Processing.dir/main.c.o	7cd52c230b5333f0
+5	101	1643060942891267720	CMakeFiles/SER334_Image_Processing.dir/Image.c.o	b6b608d10aa76dd4
+101	122	1643060942911267606	SER334_Image_Processing	3f4c4d2baec8712b
+0	57	1643061534980642050	CMakeFiles/SER334_Image_Processing.dir/main.c.o	7cd52c230b5333f0
+57	78	1643061535004641965	SER334_Image_Processing	3f4c4d2baec8712b
+1	71	1643063724617485525	CMakeFiles/SER334_Image_Processing.dir/Image.c.o	b6b608d10aa76dd4
+1	93	1643063724637484442	CMakeFiles/SER334_Image_Processing.dir/main.c.o	7cd52c230b5333f0
+93	136	1643063724681482060	SER334_Image_Processing	3f4c4d2baec8712b

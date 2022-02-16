@@ -1,0 +1,4 @@
+ To compile, run makefile by entering "make"
+ To insert, enter "sudo insmod ./covertLKM.o inp_pid=<desired starting pid>"
+ To print, enter "dmesg"
+ To remove, enter "sudo rmmod covertLKM"

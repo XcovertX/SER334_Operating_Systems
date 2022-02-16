@@ -1,0 +1,3 @@
+/home/james/CLionProjects/SER334_MOD6/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/james/CLionProjects/SER334_MOD6/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/james/CLionProjects/SER334_MOD6/cmake-build-debug/CMakeFiles/SER334_MOD6.dir
