@@ -1,0 +1,3 @@
+/home/james/CLionProjects/Operating_Systems/SER334_Operating_Systems/SER334_SJFL_CovertSJFL/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/james/CLionProjects/Operating_Systems/SER334_Operating_Systems/SER334_SJFL_CovertSJFL/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/james/CLionProjects/Operating_Systems/SER334_Operating_Systems/SER334_SJFL_CovertSJFL/cmake-build-debug/CMakeFiles/SER334_SJFL_CovertSJFL.dir
