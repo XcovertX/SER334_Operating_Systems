@@ -3,4 +3,4 @@ project(SER334_SJFL_CovertSJFL C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(SER334_SJFL_CovertSJFL main.c)
+add_executable(SER334_SJFL_CovertSJFL CovertSJFL.c)
