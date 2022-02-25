@@ -3,4 +3,4 @@ project(SER334_DataLoader C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(SER334_DataLoader Simulator.c)
+add_executable(SER334_DataLoader Simulator.c CovertDataLoader.c CovertPageTable.c)

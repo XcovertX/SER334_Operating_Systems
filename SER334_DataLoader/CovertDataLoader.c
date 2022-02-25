@@ -23,8 +23,8 @@ struct test_scenario* load_test_data(char* filename){
     fscanf(file, "%d", &ts->frame_count);
     ts->refstr_len = 0;
     while(fscanf(file, "%d", &ts->refstr[ts->refstr_len]) != EOF) {
+        printf("%dth page in reference string\n", ts->refstr[ts->refstr_len]);
         ts->refstr_len++;
     }
     return ts;
 }
-

@@ -26,6 +26,9 @@ struct page_table {
     int page_count;
     int frame_count;
     int verbose;
+    unsigned int dirty_valid;
+    int frame_number;
+    int page_number;
     struct page_table_entry *pte_head;
 };
 
@@ -43,6 +46,147 @@ char* get_mode(struct page_table* p) {
         return "MFU";
     }
     return "unknown";
+}
+
+void fifo_access(struct page_table *pt, int page) {
+    int temp[pt->frame_count];
+    for(int i = 0; i < pt->frame_count; i++) {
+        temp[i] = -1;
+    }
+    int count;
+    for(int i = 0; i < pt->page_count; i++) {
+        count = 0;
+        for(int j = 0; j < pt->frame_count; j++) {
+            if(page == temp[j]) {
+                count++;
+                pt->page_fault_count--;
+            }
+        }
+        pt->page_fault_count++;
+        if(count == 0) {
+            if(pt->page_fault_count <= pt->frame_count) {
+                temp[i] = page;
+            } else {
+                temp[(pt->page_fault_count - 1) % pt->frame_count] = page;
+            }
+        }
+    }
+}
+
+void lru_access(struct page_table *pt, int page) {
+    int frames[10];
+    int pages[30];
+    int time[10];
+    int count;
+    int flag_1;
+    int flag_2;
+
+    for(int i = 0; i < pt->frame_count; i++) {
+        frames[i] = -1;
+    }
+
+    pt->page_fault_count = 0;
+    for(int i = 0; i < pt->page_count; i++) {
+        count = 0;
+        flag_1 = 0;
+        flag_2 = 0;
+        for(int j = 0; j < pt->frame_count; j++) {
+            if(frames[j] == pages[i]) {
+                count++;
+                time[j] = count;
+                flag_1 = 1;
+                flag_2 = 1;
+                break;
+            }
+        }
+
+        if(flag_1 == 0) {
+            for(int j = 0; j < pt->frame_count; j++) {
+                if(frames[j] == -1) {
+                    count++;
+                    pt->page_fault_count++;
+                    frames[j] = pages[i];
+                    time[j] = count;
+                    flag_2 = 1;
+                    break;
+                }
+            }
+        }
+
+        if(flag_2 == 0) {
+            int min = time[0];
+            int pos = 0;
+            for(int j = 0; j < pt->frame_count; j++) {
+                if(time[j] < min) {
+                    min = time[j];
+                    pos = j;
+                }
+                count++;
+                pt->page_fault_count++;
+                frames[pos] = pages[j];
+                time[pos] = count;
+                break;
+            }
+        }
+    }
+}
+
+void mfu_access(struct page_table *pt, int page) {
+    int frames[10];
+    int pages[30];
+    int time[10];
+    int count;
+    int flag_1;
+    int flag_2;
+
+    for(int i = 0; i < pt->frame_count; i++) {
+        frames[i] = -1;
+    }
+
+    pt->page_fault_count = 0;
+    for(int i = 0; i < pt->page_count; i++) {
+        count = 0;
+        flag_1 = 0;
+        flag_2 = 0;
+        for(int j = 0; j < pt->frame_count; j++) {
+            if(frames[j] == pages[i]) {
+                count++;
+                time[j] = count;
+                flag_1 = 1;
+                flag_2 = 1;
+                break;
+            }
+        }
+
+        if(flag_1 == 0) {
+            for(int j = 0; j < pt->frame_count; j++) {
+                if(frames[j] == -1) {
+                    count++;
+                    pt->page_fault_count++;
+                    frames[j] = pages[i];
+                    time[j] = count;
+                    flag_2 = 1;
+                    break;
+                }
+            }
+        }
+
+        if(flag_2 == 0) {
+            int min = time[0];
+            int pos = 0;
+            for(int j = 0; j < pt->frame_count; j++) {
+                if(time[j] < min) {
+                    min = time[j];
+                    pos = j;
+                }
+                count++;
+                pt->page_fault_count++;
+                frames[pos] = pages[j];
+                time[pos] = count;
+                break;
+            }
+        }
+    }
 }
 
 /**
@@ -71,13 +215,6 @@ struct page_table* page_table_create(int page_count, int frame_count, enum repla
  */
 void page_table_destroy(struct page_table** pt) {
     struct page_table* pt_temp = *pt;
-    struct page_table_entry* pte = pt_temp->pte_head;
-    struct page_table_entry* temp;
-    while (pte != NULL) {
-        temp = pte->next;
-        free(pte);
-        pte = temp;
-    }
     free(pt_temp->pte_head);
     free(pt_temp);
     pt = NULL;
@@ -90,7 +227,18 @@ void page_table_destroy(struct page_table** pt) {
  * @param page The page being accessed.
  */
 void page_table_access_page(struct page_table *pt, int page) {
-    
+    if(pt->mode == FIFO) {
+
+        fifo_access(pt, page);
+
+    } else if(pt->mode == LRU) {
+
+        lru_access(pt, page);
+
+    } else if(pt->mode == MFU) {
+
+        mfu_access(pt, page);
+    }
 }
 
 /**
@@ -99,7 +247,12 @@ void page_table_access_page(struct page_table *pt, int page) {
  *
  * @param pt A page table object.
  */
-void page_table_display(struct page_table* pt);
+void page_table_display(struct page_table* pt) {
+    printf("====Page Table====\n");
+    printf("Mode: %s\n", get_mode(pt));
+    printf("Page Faults: %d\n", pt->page_fault_count);
+    printf("page frame | dirty valid\n");
+}
 
 /**
  * Displays the current contents of the page table.
@@ -107,15 +260,8 @@ void page_table_display(struct page_table* pt);
  * @param pt A page table object.
  */
 void page_table_display_contents(struct page_table *pt){
-    printf("====Page Table====\n");
-    printf("Mode: %s\n", get_mode(pt));
-    printf("Page Faults: %d\n", pt->page_fault_count);
-    printf("page frame | dirty valid\n");
     struct page_table_entry* pte = pt->pte_head;
-    for(int i = 0; i < pt->page_count; i++) {
-        printf("   %d     %d |      %d      %d\n",
-               pte->page_number, pte->frame_number,
-               0, pte->dirty_valid);
-        pte = pte->next;
-    }
+    printf("   %d     %d |     %d     %d\n",
+           pt->page_count, pt->frame_number,
+           0, pt->dirty_valid);
 }

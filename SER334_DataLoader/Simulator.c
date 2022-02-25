@@ -11,33 +11,36 @@
 #include "PageTable.h"
 
 int main(int argc, char* argv[]) {
-    char* filename = argv[2];
+//    char* filename = argv[2];
 
+    char* filename = "data-1.txt";
     struct test_scenario* data = load_test_data(filename);
     struct page_table* pt_fifo = page_table_create(data->page_count, data->frame_count, FIFO, 0);
     struct page_table* pt_lru = page_table_create(data->page_count, data->frame_count, LRU, 0);
     struct page_table* pt_mfu = page_table_create(data->page_count, data->frame_count, MFU, 0);
 
     //simulate page requests: fifo
+    page_table_display(pt_fifo);
     for (int i = 0; i < data->refstr_len; i++) {
         page_table_access_page(pt_fifo, data->refstr[i]);
-        //page_table_display_contents(pt_fifo);
+        page_table_display_contents(pt_fifo);
     }
-    page_table_display(pt_fifo);
+
 
     //simulate page requests: lru
+    page_table_display(pt_lru);
     for (int i = 0; i < data->refstr_len; i++) {
         page_table_access_page(pt_lru, data->refstr[i]);
-        //page_table_display_contents(pt_lru);
+        page_table_display_contents(pt_lru);
     }
-    page_table_display(pt_lru);
 
     //simulate page requests: mfu
+    page_table_display(pt_mfu);
     for (int i = 0; i < data->refstr_len; i++) {
         page_table_access_page(pt_mfu, data->refstr[i]);
-        //page_table_display_contents(pt_mfu);
+        page_table_display_contents(pt_mfu);
     }
-    page_table_display(pt_mfu);
+
 
     page_table_destroy(&pt_fifo);
     page_table_destroy(&pt_lru);
